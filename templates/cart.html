@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block customcss %}
+{% endblock customcss %}
+
+{% block header %}
+{% endblock header %}
+
+{% block content %}
+<nav class="navbar navbar-light bg-dark">
+    <ul class="nav">
+        <li class="nav-item">
+          <a href="{% url 'list' %}" class="nav-link active" href="#"><button type="button" class="btn btn-primary">商品一覧</button></a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'author' %}" class="nav-link" href="#"><button type="button" class="btn btn-success">管理者画面</button></a>
+        </li>
+    </ul>
+    <ul class="nav">
+        <li class="nav-item">
+          <a href="{% url 'logout' %}" class="nav-link" href="#"><button type="button" class="btn btn-danger">ログアウト</button></a>
+        </li>
+    </ul>
+</nav>
+<hr>
+<div class="container">
+    <div id="json" data-stock="{{ stock }}"></div>
+    {% for item in cart_list %}
+    <div class="alert alert-success item" role="alert">
+        <p class="name">商品名：{{ item.itemName }}</p>
+        <p class="num" value="{{ item.numberOfItem }}">数量　：{{ item.numberOfItem }}</p>
+        <p class="val" value="{{ item.itemValue }}">価格　：{{ item.itemValue }}</p>
+        <p class="sum">小計　：</p>
+        <select name="numberOfItem" class="float-right test-box" form="{{ forloop.counter }}" data-id={{ item.itemId }}></select>
+        <a href="{% url 'delete' item.pk %}"><button type="button" class="btn btn-danger">削除</button></a>
+        <p class="text-right">
+        <form id="{{ forloop.counter }}" method="POST" action="{% url 'update' %}">{% csrf_token %}
+            <input type="hidden" name="key" value="{{ item.id }}" required>
+            <button type="submit" class="btn btn-success">変更</button>
+        </form>
+        </p>
+    </div>
+    {% endfor %}
+    {% if stockFlag == True %}
+    <p>「{{ name }}」の数量が在庫をうわまわっています</p>
+    {% endif %}
+    <div class="alert alert-success" role="alert">
+        <p class="total">合計　：</p>
+    </div>
+    <a href="{% url 'list' %}"><button type="button" class="btn btn-primary">お買い物を続ける</button></a>
+    {% if cart_list %}
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+        カートを空にする
+    </button>
+    <a href="{% url 'account' %}"><button type="button" class="btn btn-success">会計に進む</button></a>
+    {% endif %}
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">確認</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    本当にカートを空にしますか？
+                </div>
+                <div class="modal-footer">
+                    <button id="no" type="button" class="btn btn-secondary" data-dismiss="modal">いいえ</button>
+                    <button id="yes" type="button" class="btn btn-primary">はい</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="pt-4 my-md-5 pt-md-5 border-top">
+    <div class="row">
+        <div class="col-12 col-md">
+            <small class="d-block mb-3 text-muted">&copy; 2020-2020</small>
+        </div>
+    </div>
+</footer>
+<script>
+    var num = document.getElementsByClassName("num");
+    var val = document.getElementsByClassName("val");
+    var sum = document.getElementsByClassName("sum");
+    var total = 0;
+    for(var i = 0; i < num.length; i++){
+        var temp = num[i].getAttribute("value") * val[i].getAttribute("value");
+        sum[i].innerHTML += temp;
+        total += temp;
+    }
+    document.getElementsByClassName("total")[0].innerHTML += total;
+</script>
+<script>
+    var sel = document.getElementsByTagName("select");
+    var strJson = document.getElementById("json").dataset.stock.split("\'").join("\"");
+    var json = JSON.parse(strJson);
+    for(var i = 0; i < sel.length; i++){
+        var id = sel[i].dataset.id;
+        var len = Number(json[id]);
+        for(var j = 1; j <= 4; j++){
+            if(j > len){
+                break;
+            }
+            var opt = document.createElement('option');
+            opt.text = j;
+            opt.setAttribute("value", j);
+
+            sel[i].appendChild(opt);
+        }
+    }
+</script>
+<script>
+    document.getElementById("yes").onclick = function(){
+        location.href = "{% url 'deleteall' %}";
+    }
+</script>
+
+{% endblock content %}

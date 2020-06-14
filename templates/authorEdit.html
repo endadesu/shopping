@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block customcss %}
+{% endblock customcss %}
+
+{% block content %}
+<nav class="navbar navbar-light bg-dark">
+    <ul class="nav">
+        <li class="nav-item">
+          <a href="{% url 'authorList' %}" class="nav-link active" href="#"><button type="button" class="btn btn-primary">商品一覧</button></a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'author' %}" class="nav-link" href="#"><button type="button" class="btn btn-success">管理者画面</button></a>
+        </li>
+    </ul>
+    <ul class="nav">
+        <li class="nav-item">
+          <a href="{% url 'logout' %}" class="nav-link" href="#"><button type="button" class="btn btn-danger">ログアウト</button></a>
+        </li>
+    </ul>
+</nav>
+<div class="container">
+    <form id="edit" method="POST" action="{% url 'authorAdd' %}" enctype="multipart/form-data">{% csrf_token %}
+        <div class="form-group">
+          <label for="name">商品名</label>
+          <input type="text" name="name" value="{{item.name}}" class="form-control" id="name" aria-describedby="emailHelp">
+        </div>
+        <div class="form-group">
+          <label for="value">価格</label>
+          <input type="text" name="val" value="{{item.value}}" class="form-control" id="value">
+        </div>
+        <div class="form-group">
+            <label for="stock">在庫</label>
+            <input type="text" name="stock" value="{{item.stock}}" class="form-control" id="stock">
+        </div>
+        <div class="form-group">
+            <label for="image">画像</label>
+            <p>
+                <img src="{{ item.images.url }}" height=225>
+            </p>
+            <input type="file" name="image" class="form-control" id="image">
+        </div>
+        <input type="hidden" name="pk" value="{{ item.pk }}">
+        <input class="btn btn-primary" type="submit" value="変更する">
+    </form>
+</div>
+<script>
+    let form = document.getElementById('edit');
+    
+
+    form.addEventListener('submit', event => {
+        
+        let name = document.getElementById('name');
+        let val = document.getElementById('value');
+        let stock = document.getElementById('stock');
+
+        let feedback = document.getElementById('feedback');
+
+        let checkNameFlag = true;
+        let checkValueFlag = true;
+        let checkStockFlag = true;
+
+        let message = "";
+        if(stock.value == ""){
+            checkStockFlag = false;
+            message = "在庫に値を入力してください";
+        }else{
+            if(stock.value.match(/[^0-9]+/)){
+                checkStockFlag = false;
+                message = "在庫に入力できるのは整数のみです";
+            }
+        }
+        if(val.value == ""){
+            checkValueFlag = false;
+            message = "価格に値を入力してください";
+        }else{
+            if(val.value.match(/[^0-9]+/)){
+                checkValueFlag = false;
+                message = "価格に入力できるのは整数のみです";
+            }
+        }
+        if(name.value == ""){
+            checkNameFlag = false;
+            message = "商品名を入力してください";
+        }
+
+        if(checkNameFlag && checkValueFlag && checkStockFlag && checkImageFlag){
+            
+        }else{
+            event.preventDefault();
+        }
+        feedback.innerHTML = message;
+    });
+</script>
+{% endblock content %}
