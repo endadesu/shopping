@@ -3,10 +3,10 @@ from django.urls import path, include
 from .views import indexfunc, listfunc, loginfunc, signupfunc, cartfunc, addfunc, deletefunc, updatefunc, logoutfunc, deleteallfunc, accountfunc, endfunc, authorfunc, authorAddfunc, authorDeletefunc, authorEditfunc, authorListfunc, addItemfunc, salesfunc, img_plot
 
 urlpatterns = [
-    path('', indexfunc, name='index'),
+    path('index', indexfunc, name='index'),
     path('admin/', admin.site.urls, name='admin'),
     path('list/', listfunc, name='list'),
-    path('login/', loginfunc, name='login'),
+    path('', loginfunc, name='login'),
     path('signup/', signupfunc, name='signup'),
     path('cart/', cartfunc, name='cart'),
     path('add/', addfunc, name='add'),

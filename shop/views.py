@@ -30,7 +30,7 @@ def loginfunc(request):
         user = authenticate(request, username=wkUsername, password=wkPassword)
         if user is not None:
             login(request, user)
-            return redirect('list')
+            return redirect('index')
         else:
             return redirect('login')
     return render(request, 'login.html')

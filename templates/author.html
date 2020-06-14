@@ -17,6 +17,9 @@
         <li class="nav-item">
           <a href="{% url 'logout' %}" class="nav-link" href="#"><button type="button" class="btn btn-danger">ログアウト</button></a>
         </li>
+        <li class="nav-item">
+            <a href="{% url 'admin:index' %}" class="nav-link"><button type="button" class="btn btn-danger">ユーザー管理</button></a>
+        </li>
     </ul>
 </nav>
 <div class="jumbotron">
@@ -24,7 +27,6 @@
     <hr class="my-4">
     <a href="{% url 'authorList' %}"><button type="button" class="btn btn-success">商品管理</button></a>
     <a href="{% url 'sales' %}"><button type="button" class="btn btn-danger">売り上げ</button></a>
-    <a href="{% url 'admin:index' %}"><button type="button" class="btn btn-danger">ユーザー管理</button></a>
 </div>
 
 {% endblock content %}
