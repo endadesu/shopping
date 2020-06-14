@@ -25,7 +25,7 @@ SECRET_KEY = '7@447fjo1hy9#yab&xh5&f(e+p!s7d$8v&v)p*+_8n!h9#=%tz'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['aws-mellosan.work']
 
 
 # Application definition
@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'shopping.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'shoppingdb',
+        'USER': 'tanaka',
+        'PASSWORD': '12234',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
